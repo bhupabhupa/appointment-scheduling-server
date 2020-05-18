@@ -2,19 +2,19 @@ const express = require('express');
 var cors = require('cors');
 const PORT = process.env.PORT || 8088;
 require('./db/db');
-const path = require('path');
+//const path = require('path');
 
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, 'build')));
 
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+// app.get('/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// });
 
 require('./routes/user')(app);
 require('./routes/event')(app);
