@@ -4,7 +4,6 @@ sgMail.setApiKey(keys.SendGridKey);
 
 module.exports = {
     sendMail(toMail, user_id) {
-        console.log(toMail)
         const msg = {
             to: toMail,
             from: 'bhupabhupa@gmail.com',

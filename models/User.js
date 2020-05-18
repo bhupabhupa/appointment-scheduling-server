@@ -17,12 +17,12 @@ const userSchema = new Schema({
             }
         }
     },
-    password: { type: String, required: true, minLength: 8 },
-    tokens: [
-        {
-            token: { type: String, required: true }
-        }
-    ]
+    password: { type: String, required: true, minLength: 8 }
+    // tokens: [
+    //     {
+    //         token: { type: String, required: true }
+    //     }
+    // ]
 });
 
 
@@ -37,8 +37,8 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.generateAuthToken = async function() {
     const user = this
     const token = jwt.sign({_id: user._id}, keys.JWT_KEY);
-    user.tokens = user.tokens.concat({token})
-    await user.save()
+    //user.tokens = user.tokens.concat({token})
+    //await user.save()
     return token
 }
 
@@ -54,7 +54,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
         //throw new Error({ error: 'Invalid login credentials' })
         return null;
     }
-    console.log(user)
     return user
 }
 

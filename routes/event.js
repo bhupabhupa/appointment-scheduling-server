@@ -16,7 +16,6 @@ module.exports = app => {
     app.put('/api/v1/event/update', async (req, res) => {
         try {
             const event = {...req.body};
-            //console.log(event)
             let result = await Event.updateOne({
                 _id: new ObjectId(event._id)
             }, {

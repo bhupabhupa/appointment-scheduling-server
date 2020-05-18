@@ -19,7 +19,11 @@ app.use(cors());
 require('./routes/user')(app);
 require('./routes/event')(app);
 require('./routes/meeting')(app);
+const {Tokens} = require("./tokens");
 
+app.all(`/api/v1/*`,Tokens.verifyToken, async (req,res,next)=>{
+	next();
+});
 app.listen(PORT, () => {
 	console.log('Server started on :', PORT)
 });
