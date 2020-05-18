@@ -9,7 +9,7 @@ const keys = require('../config/keys');
 
 
 const userSchema = new Schema({
-    full_name: { type: String, required: true },
+    full_name: { type: String, required: true }, 
     email: { type: String, required: true, unique: true, lowercase: true,
         validate: value => {
             if (!validator.isEmail(value)) {
@@ -54,6 +54,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
         //throw new Error({ error: 'Invalid login credentials' })
         return null;
     }
+    console.log(user)
     return user
 }
 
