@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "server": "nodemon server.js",
-    "start":"NODE_ENV=production node server.js"
+    "start":"NODE_ENV=production node server.js",
+     "pm2": "NODE_ENV=production pm2 start server.js"
   },
   "author": "",
   "license": "ISC",
