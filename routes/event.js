@@ -36,6 +36,7 @@ module.exports = app => {
             let id = req.params.id;
             const eventList = await Event.find({user_id: id});
             res.status(201).send({ eventList });
+            //res.status(201).send({ eventList: [] });
         } catch (error) {
             console.log("ERROR : ", error);
             res.status(400).send(error);

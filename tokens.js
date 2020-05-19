@@ -1,4 +1,5 @@
 const keys = require('./config/keys');
+const jwt = require('jsonwebtoken');
 
 class Tokens {
     static verifyToken(req,res,next){

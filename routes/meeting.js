@@ -34,7 +34,7 @@ function groupListISO(result, key) {
 	let resObj = {}
 	list.map(item => {
 	
-		if(!(item[key] in resObj)) {
+		if(!((new Date(item[key]).toISOString()) in resObj)) {
 			resObj[new Date(item[key]).toISOString()] = []
 		}
 		resObj[new Date(item[key]).toISOString()].push(item)
@@ -65,11 +65,10 @@ module.exports = app => {
         }
     });
 
-    app.get('/api/v1/meeting/list/:user_id/:dated', async (req, res) => {
+    app.get('/api/v1/meeting/list/:user_id/:dated/:page_no', async (req, res) => {
         try {
-            let user_id = req.params.user_id;
-            let dated = req.params.dated;
-            
+            let { user_id, dated, page_no } = req.params;
+
             let currentDate = new Date()
             let myISODate = currentDate.getFullYear()+"-0"+(currentDate.getMonth()+1)+"-"+(currentDate.getDate()-1)+"T"+"18:30:00.000Z";
             let query = {user_id: user_id}
@@ -78,9 +77,14 @@ module.exports = app => {
             } else {
                 query.meetingDate = { $gte: new Date(myISODate) }
             }
-            let meetingList = await Meeting.find(query);
-            let formatedList = groupList(meetingList, 'meetingDate')
-            res.status(201).send({ meetingList : formatedList });
+
+            let pageCount = 5;
+            let skipRec = parseInt(page_no)*pageCount - pageCount;
+            let meetingList = await Meeting.find(query).sort({ meetingDate: 1, meetingTime: 1}).skip(skipRec).limit(pageCount);
+            let totalRecords = await Meeting.countDocuments(query);
+            let formatedList = groupList(meetingList, 'meetingDate');
+            res.status(201).send({ meetingList : formatedList, totalRecords : totalRecords, page_no: page_no });
+            //res.status(201).send({ meetingList : {}, totalRecords : 0, page_no: page_no });
         } catch (error) {
             console.log("ERROR : ", error);
             res.status(400).send(error);
@@ -100,7 +104,7 @@ module.exports = app => {
                 query.meetingDate = { $gte: new Date(myISODate) }
             }
             let meetingList = await Meeting.find(query);
-            let formatedList = groupList(meetingList, 'meetingDate')
+            let formatedList = groupListISO(meetingList, 'meetingDate');
             res.status(201).send({ meetingList : formatedList });
         } catch (error) {
             console.log("ERROR : ", error);
